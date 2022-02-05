@@ -1,7 +1,10 @@
+const createId = require("../utils/createId")
+
 const setPagination = () => {
-  return '3fa85f64-5717-4562-b3fc-2c963f66afa6'
-}
+  id = createId();
+  return id
+};
 
 module.exports = {
   setPagination
-}
+};
