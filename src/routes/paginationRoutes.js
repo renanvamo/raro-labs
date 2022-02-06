@@ -1,7 +1,8 @@
 const paginationRoute = require('express').Router();
 
 const paginationControllers = require('../controllers/paginationControllers');
+const checkEntries = require('../validations/checkEntries');
 
-paginationRoute.get('/paginacao', paginationControllers.setPagination);
+paginationRoute.get('/paginacao', checkEntries, paginationControllers.setPagination);
 
-module.exports = paginationRoute
+module.exports = paginationRoute;
