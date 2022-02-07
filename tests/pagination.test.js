@@ -4,16 +4,18 @@ let app = require('../src/api/app');
 const { expect } = chai;
 
 describe('testing api end to end', () => {
+  let connection;
+
   before(() => {
     chai.use(chaiHttp);
   });
 
+  beforeEach(() => {
+    connection = chai.request(app)
+      .get('/paginacao')
+  });
+
   describe('if a valid arguments were given', () => {
-    let connection;
-    beforeEach(() => {
-      connection = chai.request(app)
-        .get('/paginacao')
-    });
   
     it('should return an object with "id" and "pagination"', () => {
       connection
@@ -145,5 +147,15 @@ describe('testing api end to end', () => {
     });
   });
 
-    
+  describe('if an ivalid argument were given, should return "Invalid data"', () => {
+    it('not sending "paginaAtual"', () => {
+      connection
+        .query({ quantidadePaginas: 10 })
+        .end((_err, res) => {
+          expect(res.body.message).to.equal('Invalid data');
+          expect(res).to.have.status(400);
+        });
+    });
+  });
+
 });
