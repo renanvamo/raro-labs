@@ -18,16 +18,26 @@ describe('testing api end to end', () => {
   
     it('should return an object with "id" and "pagination"', () => {
       connection
-        .then((res) => {
-          expect(res).to.have.property('id');
-          expect(res).to.have.property('paginacao');
+        .end((_err, res) => {
+          expect(res.body).to.have.property('id');
+          expect(res.body).to.have.property('paginacao');
         });
     });
+  
     it('should return an status 200"', () => {
       connection
-        .then((res) => {
+        .end((_err, res) => {
           expect(res).to.have.status(200);
         });
     });
+
+    it('verify if "id" is a number and "pagination" is an array', () => {
+      connection
+        .end((_err, res) => {
+          expect(res.body.id).to.be.a('number');
+          expect(res.body.paginacao).to.be.an('array');
+        });
+    });
+
   });
 });
