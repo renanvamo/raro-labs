@@ -156,6 +156,60 @@ describe('testing api end to end', () => {
           expect(res).to.have.status(400);
         });
     });
+
+    it('not sending "quantidadePaginas"', () => {
+      connection
+        .query({ paginaAtual: 10 })
+        .end((_err, res) => {
+          expect(res.body.message).to.equal('Invalid data');
+          expect(res).to.have.status(400);
+        });
+    });
+    
+    it('where "paginaAtual" is not a number', () => {
+      connection
+        .query({ paginaAtual: 'string', quantidadePaginas: 20 })
+        .end((_err, res) => {
+          expect(res.body.message).to.equal('Invalid data');
+          expect(res).to.have.status(400);
+        });
+    });
+
+    it('where "quantidadePaginas" is not a number', () => {
+      connection
+        .query({ paginaAtual: 10, quantidadePaginas: 'string' })
+        .end((_err, res) => {
+          expect(res.body.message).to.equal('Invalid data');
+          expect(res).to.have.status(400);
+        });
+    });
+
+    it('where "paginaAtual" is smaller than 1', () => {
+      connection
+        .query({ paginaAtual: 0, quantidadePaginas: 10 })
+        .end((_err, res) => {
+          expect(res.body.message).to.equal('Invalid data');
+          expect(res).to.have.status(400);
+        });
+    });
+
+    it('where "quantidadePaginas" is smaller than 1', () => {
+      connection
+        .query({ paginaAtual: 10, quantidadePaginas: 0 })
+        .end((_err, res) => {
+          expect(res.body.message).to.equal('Invalid data');
+          expect(res).to.have.status(400);
+        });
+    });
+
+    it('where "paginaAtual" is bigger than "quantidadePaginas"', () => {
+      connection
+        .query({ paginaAtual: 10, quantidadePaginas: 0 })
+        .end((_err, res) => {
+          expect(res.body.message).to.equal('Invalid data');
+          expect(res).to.have.status(400);
+        });
+    });
   });
 
 });
