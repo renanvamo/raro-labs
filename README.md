@@ -48,7 +48,6 @@ npm start
 
 para desenvolvimento
 ```
-// 
 npm run dev
 ```
 
