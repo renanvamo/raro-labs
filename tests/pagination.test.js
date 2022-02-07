@@ -71,5 +71,25 @@ describe('testing api end to end', () => {
           expect(res.body.paginacao).to.eql(['1', '2', '3', '4', '**5**']);
         });
     });
+
+    it('sending "paginaAtual" 1 and "quantidadePaginas" 1, should return [\'**1**\']', () => {
+      chai.request(app)
+        .get('/paginacao')
+        .query({ paginaAtual: 1, quantidadePaginas: 1 })
+        .end((_err, res) => {
+          expect(res.body.paginacao).to.have.length(1);
+          expect(res.body.paginacao).to.eql(['**1**']);
+        });
+    });
+    
+    it('sending "paginaAtual" 2 and "quantidadePaginas" 4, should return [\'1\', \'2\', \'3\', \'**4**\']', () => {
+      chai.request(app)
+        .get('/paginacao')
+        .query({ paginaAtual: 2, quantidadePaginas: 4 })
+        .end((_err, res) => {
+          expect(res.body.paginacao).to.have.length(4);
+          expect(res.body.paginacao).to.eql(['1', '**2**', '3', '4']);
+        });
+    });
   });
 });
