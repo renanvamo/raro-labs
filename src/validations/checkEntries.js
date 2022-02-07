@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
   const outOfRange = Number(paginaAtual) > Number(quantidadePaginas);
   
   if (error || outOfRange) {
-    return res.status(401).json({ message: 'Invalid data' });
+    return res.status(400).json({ message: 'Invalid data' });
   };
   
   next();
