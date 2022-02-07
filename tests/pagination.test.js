@@ -38,6 +38,38 @@ describe('testing api end to end', () => {
           expect(res.body.paginacao).to.be.an('array');
         });
     });
+  });
 
+    
+  describe('if "quantidadePaginas" is until 5, pagination property should be an array without ellipsis', () => {
+    it('sending "paginaAtual" 1 and "quantidadePaginas" 5, should return [\'**1**\', \'2\', \'3\', \'4\', \'5\']', () => {
+      chai.request(app)
+        .get('/paginacao')
+        .query({ paginaAtual: 1, quantidadePaginas: 5 })
+        .end((_err, res) => {
+          expect(res.body.paginacao).to.have.length(5);
+          expect(res.body.paginacao).to.eql(['**1**', '2', '3', '4', '5']);
+        });
+    });
+
+    it('sending "paginaAtual" 3 and "quantidadePaginas" 5, should return [\'1\', \'2\', \'**3**\', \'4\', \'5\']', () => {
+      chai.request(app)
+        .get('/paginacao')
+        .query({ paginaAtual: 3, quantidadePaginas: 5 })
+        .end((_err, res) => {
+          expect(res.body.paginacao).to.have.length(5);
+          expect(res.body.paginacao).to.eql(['1', '2', '**3**', '4', '5']);
+        });
+    });
+
+    it('sending "paginaAtual" 5 and "quantidadePaginas" 5, should return [\'1\', \'2\', \'3\', \'4\', \'**5**\']', () => {
+      chai.request(app)
+        .get('/paginacao')
+        .query({ paginaAtual: 5, quantidadePaginas: 5 })
+        .end((_err, res) => {
+          expect(res.body.paginacao).to.have.length(5);
+          expect(res.body.paginacao).to.eql(['1', '2', '3', '4', '**5**']);
+        });
+    });
   });
 });
