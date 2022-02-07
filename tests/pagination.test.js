@@ -92,4 +92,66 @@ describe('testing api end to end', () => {
         });
     });
   });
+
+  describe('if "quantidadePaginas" is bigger than 5, pagination property should be an array with ellipsis', () => {
+    it('sending "paginaAtual" 1 and "quantidadePaginas" 20, should return [\'**1**\', \'2\', \'3\', \'4\', \'5\', \'...\']', () => {
+      chai.request(app)
+        .get('/paginacao')
+        .query({ paginaAtual: 1, quantidadePaginas: 20 })
+        .end((_err, res) => {
+          expect(res.body.paginacao).to.have.length(6);
+          expect(res.body.paginacao).to.eql(['**1**', '2', '3', '4', '5', '...']);
+        });
+    });
+
+    it('sending "paginaAtual" 3 and "quantidadePaginas" 20, should return [\'1\', \'2\', \'**3**\', \'4\', \'5\', \'...\']', () => {
+      chai.request(app)
+        .get('/paginacao')
+        .query({ paginaAtual: 3, quantidadePaginas: 20 })
+        .end((_err, res) => {
+          expect(res.body.paginacao).to.have.length(6);
+          expect(res.body.paginacao).to.eql(['1', '2', '**3**', '4', '5', '...']);
+        });
+    });
+
+    it('sending "paginaAtual" 13 and "quantidadePaginas" 20, should return [\'...\', \'11\', \'12\', \'**13**\', \'14\', \'15\', \'...\']', () => {
+      chai.request(app)
+        .get('/paginacao')
+        .query({ paginaAtual: 13, quantidadePaginas: 20 })
+        .end((_err, res) => {
+          expect(res.body.paginacao).to.have.length(7);
+          expect(res.body.paginacao).to.eql(['...', '11', '12', '**13**', '14', '15', '...']);
+        });
+    });
+
+    it('sending "paginaAtual" 10 and "quantidadePaginas" 20, should return [\'...\', \'8\', \'9\', \'**10**\', \'11\', \'12\', \'...\']', () => {
+      chai.request(app)
+        .get('/paginacao')
+        .query({ paginaAtual: 10, quantidadePaginas: 20 })
+        .end((_err, res) => {
+          expect(res.body.paginacao).to.have.length(7);
+          expect(res.body.paginacao).to.eql(['...', '8', '9', '**10**', '11', '12', '...']);
+        });
+    });
+
+    it('sending "paginaAtual" 18 and "quantidadePaginas" 20, should return [\'...\', \'16\', \'17\', \'**18**\', \'19\', \'20\']', () => {
+      chai.request(app)
+        .get('/paginacao')
+        .query({ paginaAtual: 18, quantidadePaginas: 20 })
+        .end((_err, res) => {
+          expect(res.body.paginacao).to.have.length(6);
+          expect(res.body.paginacao).to.eql(['...', '16', '17', '**18**', '19', '20']);
+        });
+    });
+
+    it('sending "paginaAtual" 18 and "quantidadePaginas" 20, should return [\'...\', \'16\', \'17\', \'18\', \'19\', \'**20**\']', () => {
+      chai.request(app)
+        .get('/paginacao')
+        .query({ paginaAtual: 20, quantidadePaginas: 20 })
+        .end((_err, res) => {
+          expect(res.body.paginacao).to.have.length(6);
+          expect(res.body.paginacao).to.eql(['...', '16', '17', '18', '19', '**20**']);
+        });
+    });
+  });
 });
